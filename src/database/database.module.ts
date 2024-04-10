@@ -4,7 +4,7 @@ import { mongoConfig } from './database.config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(mongoConfig.uri),
+    MongooseModule.forRoot(mongoConfig.uri, { dbName: mongoConfig.dbName }),
   ],
 })
 export class DatabaseModule {}
