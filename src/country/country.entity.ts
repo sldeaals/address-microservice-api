@@ -14,7 +14,7 @@ interface NativeName {
   };
 }
 
-export interface CountryDocument extends Document {
+export interface Country {
   name: {
     common: string;
     official: string;
@@ -35,6 +35,8 @@ export interface CountryDocument extends Document {
   };
   capital: string[];
 }
+
+export interface CountryDocument extends Country, Document {}
 
 export const CountrySchema = new Schema<CountryDocument>({
   name: {
