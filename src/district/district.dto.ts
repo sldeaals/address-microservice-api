@@ -1,5 +1,4 @@
 import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateDistrictDto {
   @IsString()
@@ -7,10 +6,11 @@ export class CreateDistrictDto {
   countryCode: string;
 
   @IsString()
+  @IsNotEmpty()
   cityId: string;
 
   @IsString()
-  postalCode: string;
+  postalCode: string | null;
 
   @IsString()
   @IsNotEmpty()
@@ -26,4 +26,4 @@ export class CreateDistrictDto {
   accuracy?: number | null;
 }
 
-export class UpdateDistrictDto extends PartialType(CreateDistrictDto) {}
+export class UpdateDistrictDto extends (CreateDistrictDto) {}
