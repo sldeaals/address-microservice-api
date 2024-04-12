@@ -7,7 +7,10 @@ export class CreateDistrictDto {
   countryCode: string;
 
   @IsString()
-  postalCode?: string;
+  cityId: string;
+
+  @IsString()
+  postalCode: string;
 
   @IsString()
   @IsNotEmpty()

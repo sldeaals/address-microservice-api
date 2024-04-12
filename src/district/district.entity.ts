@@ -2,7 +2,8 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface District {
   countryCode: string;
-  postalCode?: string;
+  cityId: string;
+  postalCode: string;
   name: string;
   latitude: number | null;
   longitude: number | null;
@@ -13,6 +14,7 @@ export interface DistrictDocument extends District, Document {}
 
 export const DistrictSchema = new Schema<DistrictDocument>({
   countryCode: { type: String, required: true },
+  cityId: { type: String, required: true },
   postalCode: { type: String, required: true },
   name: { type: String, required: true },
   latitude: { type: Number, default: null },
