@@ -2,7 +2,9 @@ import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } fr
 import { CityService } from './city.service';
 import { CreateCityDto, UpdateCityDto } from './city.dto';
 import { CityDocument } from './city.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Cities')
 @Controller('city')
 export class CityController {
   constructor(private readonly cityService: CityService) {}

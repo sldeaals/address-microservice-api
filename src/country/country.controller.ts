@@ -2,7 +2,9 @@ import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } fr
 import { CountryService } from './country.service';
 import { CreateCountryDto, UpdateCountryDto } from './country.dto';
 import { CountryDocument } from './country.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Countries')
 @Controller('country')
 export class CountryController {
   constructor(private readonly countryService: CountryService) {}

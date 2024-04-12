@@ -11,7 +11,9 @@ import {
 import { DistrictService } from './district.service';
 import { CreateDistrictDto, UpdateDistrictDto } from './district.dto';
 import { DistrictDocument } from './district.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Districts')
 @Controller('district')
 export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
