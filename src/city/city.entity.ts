@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 import { District, DistrictSchema } from '../district/district.entity';
 
 export interface City {
-  stateCode: string | number;
+  stateId: string | number;
   countryCode: string;
   postalCodes: string[];
   cityId: number;
@@ -13,7 +13,7 @@ export interface City {
 export interface CityDocument extends City, Document {}
 
 export const CitySchema = new Schema<CityDocument>({
-  stateCode: { type: Schema.Types.Mixed, required: true },
+  stateId: { type: Schema.Types.Mixed, required: true },
   countryCode: { type: String, required: true },
   postalCodes: { type: [String], required: true },
   cityId: { type: Number, required: true },

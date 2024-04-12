@@ -5,7 +5,7 @@ import { District } from '../district/district.entity';
 export class CreateCityDto {
   @IsString()
   @IsNotEmpty()
-  stateCode: string;
+  stateId: string;
 
   @IsString()
   @IsNotEmpty()
