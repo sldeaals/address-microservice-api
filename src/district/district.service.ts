@@ -115,20 +115,18 @@ export class DistrictService {
 
     const city = await this.cityModel.findById(cityId).exec();
 
-    if (!city) {
-      throw new Error('City not found');
+    if (city) {
+      city.districts = city.districts.filter(
+        (_district) =>
+          _district.countryCode !== district.countryCode &&
+          _district.cityId !== district.cityId &&
+          _district.name !== district.name &&
+          _district.postalCode !== district.postalCode,
+      );
+      city.postalCodes = city.postalCodes.filter((_postalCode) => _postalCode !== postalCode);
+  
+      await city.save();
     }
-
-    city.districts = city.districts.filter(
-      (_district) =>
-        _district.countryCode !== district.countryCode &&
-        _district.cityId !== district.cityId &&
-        _district.name !== district.name &&
-        _district.postalCode !== district.postalCode,
-    );
-    city.postalCodes = city.postalCodes.filter((_postalCode) => _postalCode !== postalCode);
-
-    await city.save();
 
     return this.districtModel.findByIdAndDelete(id).exec();
   }
