@@ -23,7 +23,25 @@ export class DistrictService {
     return this.districtModel.findById(id).exec();
   }
 
-  async create(
+  async create(createDistrictDto: CreateDistrictDto): Promise<DistrictDocument> {
+    const createdDistrict = new this.districtModel(createDistrictDto);
+    return createdDistrict.save();
+  }
+
+  async update(
+    id: string,
+    updateDistrictDto: UpdateDistrictDto,
+  ): Promise<DistrictDocument> {
+    return this.districtModel
+      .findByIdAndUpdate(id, updateDistrictDto, { new: true })
+      .exec();
+  }
+
+  async delete(id: string): Promise<DistrictDocument> {
+    return this.districtModel.findByIdAndDelete(id).exec();
+  }
+
+  async createWithDependencies(
     createDistrictDto: CreateDistrictDto,
   ): Promise<DistrictDocument> {
     const city = await this.cityModel
@@ -57,7 +75,7 @@ export class DistrictService {
     return createdDistrict.save();
   }
 
-  async update(
+  async updateCascade(
     id: string,
     updateDistrictDto: UpdateDistrictDto,
   ): Promise<DistrictDocument> {
@@ -104,7 +122,7 @@ export class DistrictService {
       .exec();
   }
 
-  async delete(id: string): Promise<DistrictDocument> {
+  async deleteCascade(id: string): Promise<DistrictDocument> {
     const district = await this.districtModel.findById(id).exec();
 
     if (!district) {
