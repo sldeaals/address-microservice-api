@@ -1,5 +1,4 @@
 import { IsString, IsArray, IsNotEmpty, IsObject } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
 import { District } from '../district/district.entity';
 
 export class CreateCityDto {
@@ -28,4 +27,4 @@ export class CreateCityDto {
   districts: District[];
 }
 
-export class UpdateCityDto extends PartialType(CreateCityDto) {}
+export class UpdateCityDto extends CreateCityDto {}
