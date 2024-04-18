@@ -4,6 +4,7 @@ import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ExceptionsFilter } from './utils/exception-filter.utils';
 import { ApiResponseUtil } from './utils/api-response.utils';
+import { ClusterService } from './cluster/cluster.service';
 
 function useSwagger(app: INestApplication) {
   const options = new DocumentBuilder()
@@ -14,7 +15,7 @@ function useSwagger(app: INestApplication) {
   SwaggerModule.setup('api', app, document);
 }
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
   useSwagger(app);
@@ -23,4 +24,4 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT);
 }
-bootstrap();
+ClusterService.clusterize(bootstrap);
