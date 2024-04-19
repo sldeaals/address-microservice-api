@@ -4,6 +4,8 @@ import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ExceptionsFilter } from './utils/exception-filter.utils';
 import { ApiResponseUtil } from './utils/api-response.utils';
+import { RedisService } from './redis/redis.service';
+import { RedisCacheInterceptor } from './redis/redis.interceptor';
 import { ClusterService } from './cluster/cluster.service';
 
 function useSwagger(app: INestApplication) {
@@ -19,8 +21,11 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
   useSwagger(app);
-  app.useGlobalFilters(new ExceptionsFilter);
-  app.useGlobalInterceptors(new ApiResponseUtil);
+  app.useGlobalFilters(new ExceptionsFilter());
+  app.useGlobalInterceptors(
+    new RedisCacheInterceptor(new RedisService),
+    new ApiResponseUtil()
+  );
 
   await app.listen(process.env.PORT);
 }
