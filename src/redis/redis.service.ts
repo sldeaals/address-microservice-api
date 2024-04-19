@@ -22,6 +22,10 @@ export class RedisService implements OnApplicationShutdown {
     this.delAsync = promisify(this.client.del).bind(this.client);
   }
 
+  getRedisClient(): Redis | null {
+    return this.client;
+  }
+
   async get(key: string): Promise<string | null> {
     return this.getAsync(key);
   }
