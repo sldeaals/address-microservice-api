@@ -1,6 +1,7 @@
 import { IsString, IsArray, IsBoolean, IsNotEmpty, IsObject, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PartialType } from '@nestjs/mapped-types';
+import { ApiProperty } from '@nestjs/swagger';
 
 class NameDto {
   @IsString()
@@ -67,3 +68,14 @@ export class CreateCountryDto {
 }
 
 export class UpdateCountryDto extends PartialType(CreateCountryDto) {}
+
+export class CountryFilterDto {
+  @ApiProperty({ required: false })
+  name?: string;
+
+  @ApiProperty({ required: false })
+  cca2?: string;
+
+  @ApiProperty({ required: false })
+  cca3?: string;
+}

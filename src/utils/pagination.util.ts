@@ -4,7 +4,7 @@ export interface PaginationOptions {
 }
 
 export interface PaginationResult<T> {
-  data: T[];
+  data: T[] | T;
   totalCount: number;
   totalPages: number;
   currentPage: number;
