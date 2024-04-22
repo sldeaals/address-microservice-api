@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, Query } from '@nestjs/common';
 import { CityService } from './city.service';
 import { CreateCityDto, UpdateCityDto } from './city.dto';
 import { CityDocument } from './city.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { PaginationOptions, PaginationResult } from '../utils/pagination.util';
 
 @ApiTags('Cities')
 @Controller('city')
@@ -10,8 +11,13 @@ export class CityController {
   constructor(private readonly cityService: CityService) {}
 
   @Get()
-  async findAll(): Promise<CityDocument[]> {
-    return this.cityService.findAll();
+  async findAll(
+    @Query() query: PaginationOptions,
+    @Query('name') name: string,
+    @Query('countryCode') countryCode: string,
+  ): Promise<PaginationResult<CityDocument[]>> {
+    const filters = { name, countryCode };
+    return this.cityService.searchPaginated(query, filters);
   }
 
   @Get(':id')

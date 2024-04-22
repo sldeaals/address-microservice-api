@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsArray, IsNotEmpty, IsObject } from 'class-validator';
 import { District } from '../district/district.entity';
 
@@ -28,3 +29,11 @@ export class CreateCityDto {
 }
 
 export class UpdateCityDto extends CreateCityDto {}
+
+export class CityFilterDto {
+  @ApiProperty({ required: false })
+  name?: string;
+
+  @ApiProperty({ required: false })
+  countryCode?: string;
+}
