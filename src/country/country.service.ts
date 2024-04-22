@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CountryDocument } from './country.entity';
@@ -39,25 +39,33 @@ export class CountryService {
   }
 
   async searchPaginated(options: PaginationOptions, filters: CountryFilterDto): Promise<PaginationResult<CountryDocument[]>> {
+    let nameRegex: RegExp;
     const { page = 1, limit = 10 } = options;
-    const query = {};
-    if (filters.name) {
-      query['name'] = { $regex: new RegExp(filters.name, 'i') };
+
+    const queryBuilder = this.countryModel.find();
+
+    if (filters?.name) {
+      nameRegex = new RegExp(filters.name, 'i');
+      queryBuilder.where('name.common').regex(nameRegex);
     }
-    if (filters.cca2) {
-      query['cca2'] = { $regex: new RegExp(filters.cca2, 'i') };
+    if (filters?.cca2) {
+      queryBuilder.where('cca2').equals(filters.cca2);
     }
-    if (filters.cca3) {
-      query['cca3'] = { $regex: new RegExp(filters.cca3, 'i') };
+    if (filters?.cca3) {
+      queryBuilder.where('cca3').equals(filters.cca3);
     }
 
-    const totalCount = await this.countryModel.countDocuments(query).exec();
+    const totalCount = await this.countryModel.countDocuments(queryBuilder.getFilter());
     const totalPages = Math.ceil(totalCount / limit);
-    const currentPage = Math.min(page, totalPages);
-    const startIndex = (currentPage - 1) * limit;
+    const currentPage = totalCount ? Math.min(page, totalPages) : page;
+    const skip = totalCount ? ((currentPage - 1) * limit) : ((page - 1) * limit);
 
-    const data = await this.countryModel.find(query).skip(startIndex).limit(limit).exec();
- 
+    const data = await queryBuilder.skip(skip).limit(limit).exec();
+
+    if (!data || data.length === 0) {
+      throw new NotFoundException('No states found');
+    }
+
     return {
       data,
       totalCount,

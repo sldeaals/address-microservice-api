@@ -11,8 +11,14 @@ export class CountryController {
   constructor(private readonly countryService: CountryService) {}
 
   @Get()
-  async findAll(): Promise<CountryDocument[]> {
-    return this.countryService.findAll();
+  async findAll(
+    @Query() query: PaginationOptions,
+    @Query('name') name: string,
+    @Query('cca2') cca2: string,
+    @Query('cca3') cca3: string,
+  ): Promise<PaginationResult<CountryDocument[]>> {
+    const filters = { name, cca2, cca3 };
+    return this.countryService.searchPaginated(query, filters);
   }
 
   @Get(':id')
@@ -45,16 +51,5 @@ export class CountryController {
       throw new NotFoundException('Country not found');
     }
     return this.countryService.delete(id);
-  }
-
-  @Get('search')
-  async searchPaginated(
-    @Query() query: PaginationOptions,
-    @Query('name') name: string,
-    @Query('cca2') cca2: string,
-    @Query('cca3') cca3: string,
-  ): Promise<PaginationResult<CountryDocument[]>> {
-    const filters = { name, cca2, cca3 };
-    return this.countryService.searchPaginated(query, filters);
   }
 }
