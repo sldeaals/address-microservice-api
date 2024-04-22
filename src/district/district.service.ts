@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DistrictDocument } from './district.entity';
 import { CityDocument } from '../city/city.entity';
-import { CreateDistrictDto, UpdateDistrictDto } from './district.dto';
+import { CreateDistrictDto, UpdateDistrictDto, DistrictFilterDto } from './district.dto';
+import { PaginationOptions, PaginationResult } from '../utils/pagination.util';
 
 @Injectable()
 export class DistrictService {
@@ -39,6 +40,43 @@ export class DistrictService {
 
   async delete(id: string): Promise<DistrictDocument> {
     return this.districtModel.findByIdAndDelete(id).exec();
+  }
+
+  async searchPaginated(options: PaginationOptions, filters: DistrictFilterDto): Promise<PaginationResult<DistrictDocument[]>> {
+    let nameRegex: RegExp;
+    const { page = 1, limit = 10 } = options;
+    
+    const queryBuilder = this.districtModel.find();
+
+    if (filters?.name) {
+      nameRegex = new RegExp(filters.name, 'i');
+      queryBuilder.where('name').regex(nameRegex);
+    }
+    if (filters?.postalCode) {
+      nameRegex = new RegExp(filters.postalCode, 'i');
+      queryBuilder.where('postalCode').regex(nameRegex);
+    }
+    if (filters?.countryCode) {
+      queryBuilder.where('countryCode').equals(filters.countryCode);
+    }
+
+    const totalCount = await this.districtModel.countDocuments(queryBuilder.getFilter());
+    const totalPages = Math.ceil(totalCount / limit);
+    const currentPage = totalCount ? Math.min(page, totalPages) : page;
+    const skip = totalCount ? ((currentPage - 1) * limit) : ((page - 1) * limit);
+
+    const data = await queryBuilder.skip(skip).limit(limit).exec();
+
+    if (!data || data.length === 0) {
+      throw new NotFoundException('No districts found');
+    }
+
+    return {
+      data,
+      totalCount,
+      totalPages,
+      currentPage,
+    };
   }
 
   async createWithDependencies(

@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDistrictDto {
   @IsString()
@@ -27,3 +28,14 @@ export class CreateDistrictDto {
 }
 
 export class UpdateDistrictDto extends (CreateDistrictDto) {}
+
+export class DistrictFilterDto {
+  @ApiProperty({ required: false })
+  name?: string;
+
+  @ApiProperty({ required: false })
+  postalCode?: string;
+
+  @ApiProperty({ required: false })
+  countryCode?: string;
+}
