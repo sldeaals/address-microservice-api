@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DistrictDocument } from './district.entity';
 import { CityDocument } from '../city/city.entity';
-import { CreateDistrictDto, UpdateDistrictDto } from './district.dto';
+import { CreateDistrictDto, UpdateDistrictDto, DistrictFilterDto } from './district.dto';
+import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/pagination.util';
 
 @Injectable()
 export class DistrictService {
@@ -39,6 +40,26 @@ export class DistrictService {
 
   async delete(id: string): Promise<DistrictDocument> {
     return this.districtModel.findByIdAndDelete(id).exec();
+  }
+
+  async searchPaginated(options: PaginationOptions, filters: DistrictFilterDto): Promise<PaginationResult<DistrictDocument[]>> {
+    return paginateSearch<DistrictDocument>(
+      this.districtModel,
+      options,
+      (queryBuilder, filters) => {
+        if (filters?.name) {
+          queryBuilder.where('name').regex(new RegExp(filters.name, 'i'));
+        }
+        if (filters?.countryCode) {
+          queryBuilder.where('countryCode').equals(filters.countryCode);
+        }
+        if (filters?.postalCode) {
+          queryBuilder.where('postalCode').regex(new RegExp(filters.postalCode, 'i'));
+        }
+        return queryBuilder;
+      },
+      filters
+    );
   }
 
   async createWithDependencies(

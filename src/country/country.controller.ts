@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CountryService } from './country.service';
 import { CreateCountryDto, UpdateCountryDto } from './country.dto';
 import { CountryDocument } from './country.entity';
-import { ApiTags } from '@nestjs/swagger';
+import { PaginationOptions, PaginationResult } from '../utils/pagination.util';
 
 @ApiTags('Countries')
 @Controller('country')
@@ -10,8 +11,14 @@ export class CountryController {
   constructor(private readonly countryService: CountryService) {}
 
   @Get()
-  async findAll(): Promise<CountryDocument[]> {
-    return this.countryService.findAll();
+  async findAll(
+    @Query() query: PaginationOptions,
+    @Query('name') name: string,
+    @Query('cca2') cca2: string,
+    @Query('cca3') cca3: string,
+  ): Promise<PaginationResult<CountryDocument[]>> {
+    const filters = { name, cca2, cca3 };
+    return this.countryService.searchPaginated(query, filters);
   }
 
   @Get(':id')

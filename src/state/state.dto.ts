@@ -1,5 +1,6 @@
 import { IsString, IsArray, IsNotEmpty, IsObject } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
+import { ApiProperty } from '@nestjs/swagger';
 import { City } from '../city/city.entity';
 
 export class CreateStateDto {
@@ -21,3 +22,11 @@ export class CreateStateDto {
 }
 
 export class UpdateStateDto extends PartialType(CreateStateDto) {}
+
+export class StateFilterDto {
+  @ApiProperty({ required: false })
+  name?: string;
+
+  @ApiProperty({ required: false })
+  countryCode?: string;
+}

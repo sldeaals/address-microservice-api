@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ApiResponseUtil } from './api-response.utils';
-import { ExceptionsFilter } from './exception-filter.utils';
+import { ApiResponseUtil } from './api-response.util';
+import { ExceptionsFilter } from './exception-filter.util';
 
 @Module({
   providers: [ApiResponseUtil, ExceptionsFilter],

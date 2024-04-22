@@ -4,7 +4,8 @@ import { Model } from 'mongoose';
 import { CityDocument } from './city.entity';
 import { StateDocument } from '../state/state.entity';
 import { DistrictDocument } from '../district/district.entity';
-import { CreateCityDto, UpdateCityDto } from './city.dto';
+import { CreateCityDto, UpdateCityDto, CityFilterDto } from './city.dto';
+import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/pagination.util';
 
 @Injectable()
 export class CityService {
@@ -43,6 +44,23 @@ export class CityService {
 
   async delete(id: string): Promise<CityDocument> {
     return this.cityModel.findByIdAndDelete(id).exec();
+  }
+
+  async searchPaginated(options: PaginationOptions, filters: CityFilterDto): Promise<PaginationResult<CityDocument[]>> {
+    return paginateSearch<CityDocument>(
+      this.cityModel,
+      options,
+      (queryBuilder, filters) => {
+        if (filters?.name) {
+          queryBuilder.where('name').regex(new RegExp(filters.name, 'i'));
+        }
+        if (filters?.countryCode) {
+          queryBuilder.where('countryCode').equals(filters.countryCode);
+        }
+        return queryBuilder;
+      },
+      filters
+    );
   }
 
   async createWithDependencies(createCityDto: CreateCityDto): Promise<CityDocument> {
