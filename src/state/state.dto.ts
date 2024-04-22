@@ -1,7 +1,7 @@
 import { IsString, IsArray, IsNotEmpty, IsObject } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
-import { City } from '../city/city.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { City } from '../city/city.entity';
 
 export class CreateStateDto {
   @IsString()
