@@ -1,10 +1,14 @@
 import { Model, Document, Query, FilterQuery } from 'mongoose';
 import { NotFoundException } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
+import { FilterDto } from './util.dto';
+
+export type SortOrder = 'asc' | 'desc';
 
 export interface PaginationOptions {
   page: number;
   limit: number;
+  sort?: string;
+  order?: SortOrder;
 }
 
 export interface PaginationResult<T> {
@@ -12,23 +16,6 @@ export interface PaginationResult<T> {
   totalCount: number;
   totalPages: number;
   currentPage: number;
-}
-
-export class FilterDto {
-  @ApiProperty({ required: false })
-  name?: string;
-
-  @ApiProperty({ required: false })
-  countryCode?: string;
-
-  @ApiProperty({ required: false })
-  cca2?: string;
-
-  @ApiProperty({ required: false })
-  cca3?: string;
-
-  @ApiProperty({ required: false })
-  postalCode?: string;
 }
 
 export type FilterFn<T> = (queryBuilder: Query<T[], Document<T>>, filters: FilterDto) => Query<T[], Document<T>>;
@@ -39,7 +26,7 @@ export async function paginateSearch<T extends Document>(
   filterFn: FilterFn<T> | undefined,
   filters: FilterDto
 ): Promise<PaginationResult<T[]>> {
-  const { page = 1, limit = 10 } = options;
+  const { page = 1, limit = 10, sort, order } = options;
 
   let queryBuilder = model.find() as Query<T[], Document<T>>;
 
@@ -51,6 +38,11 @@ export async function paginateSearch<T extends Document>(
   const totalPages = Math.ceil(totalCount / limit);
   const currentPage = totalCount ? Math.min(page, totalPages) : page;
   const skip = totalCount ? (currentPage - 1) * limit : (page - 1) * limit;
+
+  if (sort && order) {
+    const sortOptions: { [key: string]: SortOrder } = { [sort]: order };
+    queryBuilder = queryBuilder.sort(sortOptions);
+  }
 
   const data = await queryBuilder.skip(skip).limit(limit).exec();
 
