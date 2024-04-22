@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, Query } from '@nestjs/common';
 import { StateService } from './state.service';
 import { CreateStateDto, UpdateStateDto } from './state.dto';
 import { StateDocument } from './state.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { PaginationOptions, PaginationResult } from '../utils/pagination.util';
 
 @ApiTags('States')
 @Controller('state')
@@ -10,8 +11,13 @@ export class StateController {
   constructor(private readonly stateService: StateService) {}
 
   @Get()
-  async findAll(): Promise<StateDocument[]> {
-    return this.stateService.findAll();
+  async findAll(
+    @Query() query: PaginationOptions,
+    @Query('name') name: string,
+    @Query('countryCode') countryCode: string,
+  ): Promise<PaginationResult<StateDocument[]>> {
+    const filters = { name, countryCode };
+    return this.stateService.searchPaginated(query, filters);
   }
 
   @Get(':id')
