@@ -8,5 +8,5 @@ export enum UserRole {
 export interface User {
   id: string;
   email: string;
-  roles: UserRole[];
+  role: UserRole;
 }
