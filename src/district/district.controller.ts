@@ -8,19 +8,25 @@ import {
   Body,
   NotFoundException,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { DistrictService } from './district.service';
 import { CreateDistrictDto, UpdateDistrictDto } from './district.dto';
 import { DistrictDocument } from './district.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { PaginationOptions, PaginationResult } from '../utils/pagination.util';
+import { UserRole } from '../auth/auth.types';
+import { RolesGuard } from '../auth/auth.roles.guard';
+import { Roles } from '../utils/roles.decorator.util';
 
 @ApiTags('Districts')
+@UseGuards(RolesGuard)
 @Controller('district')
 export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
 
   @Get()
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT, UserRole.CUSTOMER)
   async findAll(
     @Query() query: PaginationOptions,
     @Query('name') name: string,
@@ -32,6 +38,7 @@ export class DistrictController {
   }
 
   @Get(':id')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT, UserRole.CUSTOMER)
   async findById(@Param('id') id: string): Promise<DistrictDocument> {
     const district = await this.districtService.findById(id);
     if (!district) {
@@ -41,6 +48,7 @@ export class DistrictController {
   }
 
   @Post()
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   async create(
     @Body() createDistrictDto: CreateDistrictDto,
   ): Promise<DistrictDocument> {
@@ -48,6 +56,7 @@ export class DistrictController {
   }
 
   @Put(':id')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT)
   async update(
     @Param('id') id: string,
     @Body() updateDistrictDto: UpdateDistrictDto,
@@ -60,6 +69,7 @@ export class DistrictController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.SUPER_ADMIN)
   async delete(@Param('id') id: string): Promise<DistrictDocument> {
     const existingDistrict = await this.districtService.findById(id);
     if (!existingDistrict) {
