@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
@@ -9,11 +9,18 @@ import { DistrictModule } from './district/district.module';
 import { UtilsModule } from './utils/utils.module';
 import { ClusterModule } from './cluster/cluster.module';
 import { RedisModule } from './redis/redis.module';
+import { AuthModule } from './auth/auth.module';
+import { AuthMiddleware } from './auth/auth.middleware';
+import { AuthService } from './auth/auth.service';
 
 @Module({
-  imports: [DatabaseModule, CountryModule, StateModule, CityModule, DistrictModule, UtilsModule, ClusterModule, RedisModule],
+  imports: [DatabaseModule, CountryModule, StateModule, CityModule, DistrictModule, UtilsModule, ClusterModule, RedisModule, AuthModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService],
 })
 
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*');
+  }
+}
