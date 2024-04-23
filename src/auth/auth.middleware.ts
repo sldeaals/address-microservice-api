@@ -1,18 +1,30 @@
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { AuthService } from './auth.service';
+import { ApiKeyService } from '../utils/api.key.service.util';
+import { IpWhitelistService } from '../utils/ip.whitelist.service.util';
 import { User } from './auth.types';
+import { parseIp } from '../utils/common.util';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly apiKeyService: ApiKeyService,
+    private readonly ipWhitelistService: IpWhitelistService,
+  ) {}
 
-  async use(req: Request & { user: User }, res: Response, next: NextFunction) {
+  async use(req: Request & { user: User } & { ip: string }, res: Response, next: NextFunction) {
     const apiKey = req.headers['api-key'] as string;
     const apiKeySecret = req.headers['api-key-secret'] as string;
+    const clientIp = parseIp(req) || req.ip;
 
-    if (!apiKey || !apiKeySecret) {
-      throw new UnauthorizedException('API Key and API Key Secret are required.');
+    if (!this.apiKeyService.isValidApiKey(apiKey)) {
+      throw new UnauthorizedException('Invalid API key');
+    }
+
+    if (!this.ipWhitelistService.isIpAllowed(clientIp)) {
+      throw new UnauthorizedException('IP address not allowed');
     }
 
     const user = await this.authService.authenticate(apiKey, apiKeySecret);
