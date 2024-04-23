@@ -7,7 +7,7 @@ import {
 import { Observable, of } from 'rxjs';
 import { RedisService } from './redis.service';
 import { tap } from 'rxjs/operators';
-import { ApiResponse } from '../common/api-response.interface';
+import { ApiResponse } from '../utils/api.response.interface.util';
 
 @Injectable()
 export class RedisCacheInterceptor<T>
