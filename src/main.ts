@@ -40,6 +40,9 @@ async function bootstrap(): Promise<void> {
     httpsServer.listen(process.env.PORT, () => {
       Logger.log(`Application is running on: ${process.env.PORT}`);
     });
+    httpsServer.on('error', (error) => {
+      Logger.error(`HTTPS server error: ${error}`);
+    });
   } else {
     await app.listen(process.env.PORT);
   }
