@@ -6,7 +6,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { PaginationOptions, PaginationResult } from '../utils/pagination.util';
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
-import { Roles } from '../utils/roles.decorator.util';
+import { Roles } from '../utils/decorators/roles.decorator.util';
 
 @ApiTags('Cities')
 @UseGuards(RolesGuard)

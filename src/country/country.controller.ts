@@ -6,7 +6,7 @@ import { CountryDocument } from './country.entity';
 import { PaginationOptions, PaginationResult } from '../utils/pagination.util';
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
-import { Roles } from '../utils/roles.decorator.util';
+import { Roles } from '../utils/decorators/roles.decorator.util';
 
 @ApiTags('Countries')
 @UseGuards(RolesGuard)
