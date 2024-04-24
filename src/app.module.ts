@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { AuthService } from './auth/auth.service';
 import { SecurityMiddleware } from './utils/middlewares/security.middleware';
+import { CSPMiddleware } from './utils/middlewares/csp.middleware';
 
 @Module({
   imports: [DatabaseModule, CountryModule, StateModule, CityModule, DistrictModule, UtilsModule, ClusterModule, RedisModule, AuthModule],
@@ -22,6 +23,6 @@ import { SecurityMiddleware } from './utils/middlewares/security.middleware';
 
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(SecurityMiddleware, AuthMiddleware).forRoutes('*');
+    consumer.apply(SecurityMiddleware, CSPMiddleware, AuthMiddleware).forRoutes('*');
   }
 }
