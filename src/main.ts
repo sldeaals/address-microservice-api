@@ -1,11 +1,10 @@
-import fs from 'fs';
-import https from 'https';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { INestApplication, Logger } from '@nestjs/common';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ExceptionsFilter } from './utils/filters/exception.filter.util';
 import { ApiResponseUtil } from './utils/common/api.response.util';
+import { createHttpServer } from './utils/common/common.util';
 import { Environment } from './utils/utils.types';
 import { rateLimitMiddleware } from './utils/middlewares/rate-limit.middleware';
 import { RedisService } from './redis/redis.service';
@@ -25,27 +24,25 @@ function useSwagger(app: INestApplication) {
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   const env = process.env.ENVIRONMENT;
-  const ipWhitelistService = new IpWhitelistService;
+  const ipWhitelistService = new IpWhitelistService();
 
   useSwagger(app);
 
   app.use(rateLimitMiddleware);
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalFilters(new ExceptionsFilter());
   app.useGlobalInterceptors(
-    new RedisCacheInterceptor(new RedisService),
-    new ApiResponseUtil()
+    new RedisCacheInterceptor(new RedisService()),
+    new ApiResponseUtil(),
   );
   app.enableCors({
     origin: ipWhitelistService.getAllowedIps(),
-    credentials: true
+    credentials: true,
   });
 
   if (env === Environment.PRODUCTION) {
-    const httpsOptions = {
-      key: fs.readFileSync('path/to/private-key.pem'),
-      cert: fs.readFileSync('path/to/certificate.pem'),
-    };
-    const httpsServer = https.createServer(httpsOptions, app.getHttpAdapter().getInstance());
+    const httpsServer = createHttpServer(app);
+
     httpsServer.listen(process.env.PORT, () => {
       Logger.log(`Application is running on: ${process.env.PORT}`);
     });
