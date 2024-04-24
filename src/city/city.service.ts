@@ -5,7 +5,7 @@ import { CityDocument } from './city.entity';
 import { StateDocument } from '../state/state.entity';
 import { DistrictDocument } from '../district/district.entity';
 import { CreateCityDto, UpdateCityDto, CityFilterDto } from './city.dto';
-import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/pagination.util';
+import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/common/pagination.util';
 
 @Injectable()
 export class CityService {

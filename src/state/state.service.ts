@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { StateDocument } from './state.entity';
 import { CreateStateDto, UpdateStateDto, StateFilterDto } from './state.dto';
-import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/pagination.util';
+import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/common/pagination.util';
 
 @Injectable()
 export class StateService {

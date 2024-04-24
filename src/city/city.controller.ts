@@ -3,10 +3,10 @@ import { CityService } from './city.service';
 import { CreateCityDto, UpdateCityDto } from './city.dto';
 import { CityDocument } from './city.entity';
 import { ApiTags } from '@nestjs/swagger';
-import { PaginationOptions, PaginationResult } from '../utils/pagination.util';
+import { PaginationOptions, PaginationResult } from '../utils/common/pagination.util';
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
-import { Roles } from '../utils/roles.decorator.util';
+import { Roles } from '../utils/decorators/roles.decorator.util';
 
 @ApiTags('Cities')
 @UseGuards(RolesGuard)

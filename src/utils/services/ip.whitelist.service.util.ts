@@ -7,4 +7,8 @@ export class IpWhitelistService {
   isIpAllowed(ip: string): boolean {
     return this.allowedIps.includes(ip);
   }
+
+  getAllowedIps(): string[] {
+    return this.allowedIps;
+  }
 }

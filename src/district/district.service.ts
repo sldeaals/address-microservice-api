@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { DistrictDocument } from './district.entity';
 import { CityDocument } from '../city/city.entity';
 import { CreateDistrictDto, UpdateDistrictDto, DistrictFilterDto } from './district.dto';
-import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/pagination.util';
+import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/common/pagination.util';
 
 @Injectable()
 export class DistrictService {

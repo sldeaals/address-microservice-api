@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import crypto from 'crypto';
-import { UserRole } from '../auth/auth.types';
+import { UserRole } from '../../auth/auth.types';
 
 @Injectable()
 export class ApiKeyService {
