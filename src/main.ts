@@ -7,7 +7,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ExceptionsFilter } from './utils/exception.filter.util';
 import { ApiResponseUtil } from './utils/api.response.util';
 import { Environment } from './utils/types.util';
-import { rateLimitMiddleware } from './utils/rate-limit.middleware';
+import { rateLimitMiddleware } from './utils/middlewares/rate-limit.middleware';
 import { RedisService } from './redis/redis.service';
 import { RedisCacheInterceptor } from './redis/redis.interceptor';
 import { ClusterService } from './cluster/cluster.service';
