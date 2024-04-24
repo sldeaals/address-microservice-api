@@ -1,6 +1,6 @@
 import { Model, Document, Query, FilterQuery } from 'mongoose';
 import { NotFoundException } from '@nestjs/common';
-import { FilterDto } from '../util.dto';
+import { FilterDto } from '../utils.dto';
 
 export type SortOrder = 'asc' | 'desc';
 
