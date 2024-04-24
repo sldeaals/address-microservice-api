@@ -1,8 +1,8 @@
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { ApiKeyService } from '../utils/api.key.service.util';
-import { IpWhitelistService } from '../utils/ip.whitelist.service.util';
+import { ApiKeyService } from '../utils/services/api.key.service.util';
+import { IpWhitelistService } from '../utils/services/ip.whitelist.service.util';
 import { User } from './auth.types';
 import { parseIp } from '../utils/common.util';
 
