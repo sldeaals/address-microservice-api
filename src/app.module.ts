@@ -12,6 +12,8 @@ import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { AuthService } from './auth/auth.service';
+import { SecurityMiddleware } from './utils/middlewares/security.middleware';
+import { CSPMiddleware } from './utils/middlewares/csp.middleware';
 
 @Module({
   imports: [DatabaseModule, CountryModule, StateModule, CityModule, DistrictModule, UtilsModule, ClusterModule, RedisModule, AuthModule],
@@ -21,6 +23,6 @@ import { AuthService } from './auth/auth.service';
 
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('*');
+    consumer.apply(SecurityMiddleware, CSPMiddleware, AuthMiddleware).forRoutes('*');
   }
 }
