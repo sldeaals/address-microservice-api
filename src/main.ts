@@ -4,7 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { INestApplication, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ExceptionsFilter } from './utils/exception.filter.util';
+import { ExceptionsFilter } from './utils/filters/exception.filter.util';
 import { ApiResponseUtil } from './utils/api.response.util';
 import { Environment } from './utils/types.util';
 import { rateLimitMiddleware } from './utils/middlewares/rate-limit.middleware';
@@ -28,7 +28,7 @@ async function bootstrap(): Promise<void> {
   const ipWhitelistService = new IpWhitelistService;
 
   useSwagger(app);
-  
+
   app.use(rateLimitMiddleware);
   app.useGlobalFilters(new ExceptionsFilter());
   app.useGlobalInterceptors(
