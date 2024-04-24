@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CountryDocument } from './country.entity';
 import { CreateCountryDto, UpdateCountryDto, CountryFilterDto } from './country.dto';
-import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/pagination.util';
+import { PaginationOptions, PaginationResult, paginateSearch } from '../utils/common/pagination.util';
 
 @Injectable()
 export class CountryService {

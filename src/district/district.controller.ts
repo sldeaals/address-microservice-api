@@ -14,7 +14,7 @@ import { DistrictService } from './district.service';
 import { CreateDistrictDto, UpdateDistrictDto } from './district.dto';
 import { DistrictDocument } from './district.entity';
 import { ApiTags } from '@nestjs/swagger';
-import { PaginationOptions, PaginationResult } from '../utils/pagination.util';
+import { PaginationOptions, PaginationResult } from '../utils/common/pagination.util';
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
 import { Roles } from '../utils/decorators/roles.decorator.util';
