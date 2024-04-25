@@ -1,0 +1,5 @@
+export enum Environment {
+  DEVELOPMENT = 'DEVELOPMENT',
+  TESTING = 'TESTING',
+  PRODUCTION = 'TECH_SUPPRODUCTIONPORT',
+}
