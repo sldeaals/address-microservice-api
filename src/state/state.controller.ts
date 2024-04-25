@@ -9,12 +9,16 @@ import {
   NotFoundException,
   Query,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { StateService } from './state.service';
 import { CreateStateDto, UpdateStateDto } from './state.dto';
 import { StateDocument } from './state.entity';
 import { ApiTags } from '@nestjs/swagger';
-import { PaginationOptions, PaginationResult } from '../utils/common/pagination.util';
+import {
+  PaginationOptions,
+  PaginationResult,
+} from '../utils/common/pagination.util';
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
 import { Roles } from '../utils/decorators/roles.decorator.util';
@@ -58,7 +62,9 @@ export class StateController {
 
   @Post()
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
-  async create(@Body() createStateDto: CreateStateDto): Promise<StateDocument> {
+  async create(
+    @Body(new ValidationPipe()) createStateDto: CreateStateDto,
+  ): Promise<StateDocument> {
     return this.stateService.create(createStateDto);
   }
 
@@ -66,7 +72,7 @@ export class StateController {
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT)
   async update(
     @Param('id') id: string,
-    @Body() updateStateDto: UpdateStateDto,
+    @Body(new ValidationPipe()) updateStateDto: UpdateStateDto,
   ): Promise<StateDocument> {
     const existingState = await this.stateService.findById(id);
     if (!existingState) {

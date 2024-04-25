@@ -9,12 +9,16 @@ import {
   NotFoundException,
   Query,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { DistrictService } from './district.service';
 import { CreateDistrictDto, UpdateDistrictDto } from './district.dto';
 import { DistrictDocument } from './district.entity';
 import { ApiTags } from '@nestjs/swagger';
-import { PaginationOptions, PaginationResult } from '../utils/common/pagination.util';
+import {
+  PaginationOptions,
+  PaginationResult,
+} from '../utils/common/pagination.util';
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
 import { Roles } from '../utils/decorators/roles.decorator.util';
@@ -26,7 +30,12 @@ export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
 
   @Get()
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT, UserRole.CUSTOMER)
+  @Roles(
+    UserRole.SUPER_ADMIN,
+    UserRole.ADMIN,
+    UserRole.TECH_SUPPORT,
+    UserRole.CUSTOMER,
+  )
   async findAll(
     @Query() query: PaginationOptions,
     @Query('name') name: string,
@@ -38,7 +47,12 @@ export class DistrictController {
   }
 
   @Get(':id')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT, UserRole.CUSTOMER)
+  @Roles(
+    UserRole.SUPER_ADMIN,
+    UserRole.ADMIN,
+    UserRole.TECH_SUPPORT,
+    UserRole.CUSTOMER,
+  )
   async findById(@Param('id') id: string): Promise<DistrictDocument> {
     const district = await this.districtService.findById(id);
     if (!district) {
@@ -50,7 +64,7 @@ export class DistrictController {
   @Post()
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   async create(
-    @Body() createDistrictDto: CreateDistrictDto,
+    @Body(new ValidationPipe()) createDistrictDto: CreateDistrictDto,
   ): Promise<DistrictDocument> {
     return this.districtService.create(createDistrictDto);
   }
@@ -59,7 +73,7 @@ export class DistrictController {
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT)
   async update(
     @Param('id') id: string,
-    @Body() updateDistrictDto: UpdateDistrictDto,
+    @Body(new ValidationPipe()) updateDistrictDto: UpdateDistrictDto,
   ): Promise<DistrictDocument> {
     const existingDistrict = await this.districtService.findById(id);
     if (!existingDistrict) {
