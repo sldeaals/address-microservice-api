@@ -14,7 +14,7 @@ import {
 import { CityService } from './city.service';
 import { CreateCityDto, UpdateCityDto } from './city.dto';
 import { CityDocument } from './city.entity';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import {
   PaginationOptions,
   PaginationResult,
@@ -22,6 +22,7 @@ import {
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
 import { Roles } from '../utils/decorators/roles.decorator.util';
+import { CityControllerSwagger } from '../swagger/city.swagger';
 
 @ApiTags('Cities')
 @UseGuards(RolesGuard)
@@ -29,6 +30,7 @@ import { Roles } from '../utils/decorators/roles.decorator.util';
 export class CityController {
   constructor(private readonly cityService: CityService) {}
 
+  @ApiOperation(CityControllerSwagger.operations.findAll)
   @Get()
   @Roles(
     UserRole.SUPER_ADMIN,
@@ -45,6 +47,7 @@ export class CityController {
     return this.cityService.searchPaginated(query, filters);
   }
 
+  @ApiOperation(CityControllerSwagger.operations.findById)
   @Get(':id')
   @Roles(
     UserRole.SUPER_ADMIN,
@@ -60,6 +63,7 @@ export class CityController {
     return city;
   }
 
+  @ApiOperation(CityControllerSwagger.operations.create)
   @Post()
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   async create(
@@ -68,6 +72,7 @@ export class CityController {
     return this.cityService.create(createCityDto);
   }
 
+  @ApiOperation(CityControllerSwagger.operations.update)
   @Put(':id')
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT)
   async update(
@@ -81,6 +86,7 @@ export class CityController {
     return this.cityService.update(id, updateCityDto);
   }
 
+  @ApiOperation(CityControllerSwagger.operations.delete)
   @Delete(':id')
   @Roles(UserRole.SUPER_ADMIN)
   async delete(@Param('id') id: string): Promise<CityDocument> {

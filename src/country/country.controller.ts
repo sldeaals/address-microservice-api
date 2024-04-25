@@ -11,7 +11,7 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CountryService } from './country.service';
 import { CreateCountryDto, UpdateCountryDto } from './country.dto';
 import { CountryDocument } from './country.entity';
@@ -22,6 +22,7 @@ import {
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
 import { Roles } from '../utils/decorators/roles.decorator.util';
+import { CountryControllerSwagger } from '../swagger/country.swagger';
 
 @ApiTags('Countries')
 @UseGuards(RolesGuard)
@@ -29,6 +30,7 @@ import { Roles } from '../utils/decorators/roles.decorator.util';
 export class CountryController {
   constructor(private readonly countryService: CountryService) {}
 
+  @ApiOperation(CountryControllerSwagger.operations.findAll)
   @Get()
   @Roles(
     UserRole.SUPER_ADMIN,
@@ -46,6 +48,7 @@ export class CountryController {
     return this.countryService.searchPaginated(query, filters);
   }
 
+  @ApiOperation(CountryControllerSwagger.operations.findById)
   @Get(':id')
   @Roles(
     UserRole.SUPER_ADMIN,
@@ -61,6 +64,7 @@ export class CountryController {
     return country;
   }
 
+  @ApiOperation(CountryControllerSwagger.operations.create)
   @Post()
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   async create(
@@ -69,6 +73,7 @@ export class CountryController {
     return this.countryService.create(createCountryDto);
   }
 
+  @ApiOperation(CountryControllerSwagger.operations.update)
   @Put(':id')
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT)
   async update(
@@ -82,6 +87,7 @@ export class CountryController {
     return this.countryService.update(id, updateCountryDto);
   }
 
+  @ApiOperation(CountryControllerSwagger.operations.delete)
   @Delete(':id')
   @Roles(UserRole.SUPER_ADMIN)
   async delete(@Param('id') id: string): Promise<CountryDocument> {

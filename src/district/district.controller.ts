@@ -14,7 +14,7 @@ import {
 import { DistrictService } from './district.service';
 import { CreateDistrictDto, UpdateDistrictDto } from './district.dto';
 import { DistrictDocument } from './district.entity';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import {
   PaginationOptions,
   PaginationResult,
@@ -22,6 +22,7 @@ import {
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
 import { Roles } from '../utils/decorators/roles.decorator.util';
+import { DistrictControllerSwagger } from '../swagger/district.swagger';
 
 @ApiTags('Districts')
 @UseGuards(RolesGuard)
@@ -29,6 +30,7 @@ import { Roles } from '../utils/decorators/roles.decorator.util';
 export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
 
+  @ApiOperation(DistrictControllerSwagger.operations.findAll)
   @Get()
   @Roles(
     UserRole.SUPER_ADMIN,
@@ -46,6 +48,7 @@ export class DistrictController {
     return this.districtService.searchPaginated(query, filters);
   }
 
+  @ApiOperation(DistrictControllerSwagger.operations.findById)
   @Get(':id')
   @Roles(
     UserRole.SUPER_ADMIN,
@@ -61,6 +64,7 @@ export class DistrictController {
     return district;
   }
 
+  @ApiOperation(DistrictControllerSwagger.operations.create)
   @Post()
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   async create(
@@ -69,6 +73,7 @@ export class DistrictController {
     return this.districtService.create(createDistrictDto);
   }
 
+  @ApiOperation(DistrictControllerSwagger.operations.update)
   @Put(':id')
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT)
   async update(
@@ -82,6 +87,7 @@ export class DistrictController {
     return this.districtService.update(id, updateDistrictDto);
   }
 
+  @ApiOperation(DistrictControllerSwagger.operations.delete)
   @Delete(':id')
   @Roles(UserRole.SUPER_ADMIN)
   async delete(@Param('id') id: string): Promise<DistrictDocument> {
