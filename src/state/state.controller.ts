@@ -14,7 +14,7 @@ import {
 import { StateService } from './state.service';
 import { CreateStateDto, UpdateStateDto } from './state.dto';
 import { StateDocument } from './state.entity';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import {
   PaginationOptions,
   PaginationResult,
@@ -22,6 +22,7 @@ import {
 import { UserRole } from '../auth/auth.types';
 import { RolesGuard } from '../auth/auth.roles.guard';
 import { Roles } from '../utils/decorators/roles.decorator.util';
+import { StateControllerSwagger } from '../swagger/state.swagger';
 
 @ApiTags('States')
 @UseGuards(RolesGuard)
@@ -29,6 +30,7 @@ import { Roles } from '../utils/decorators/roles.decorator.util';
 export class StateController {
   constructor(private readonly stateService: StateService) {}
 
+  @ApiOperation(StateControllerSwagger.operations.findAll)
   @Get()
   @Roles(
     UserRole.SUPER_ADMIN,
@@ -45,6 +47,7 @@ export class StateController {
     return this.stateService.searchPaginated(query, filters);
   }
 
+  @ApiOperation(StateControllerSwagger.operations.findById)
   @Get(':id')
   @Roles(
     UserRole.SUPER_ADMIN,
@@ -60,6 +63,7 @@ export class StateController {
     return state;
   }
 
+  @ApiOperation(StateControllerSwagger.operations.create)
   @Post()
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   async create(
@@ -68,6 +72,7 @@ export class StateController {
     return this.stateService.create(createStateDto);
   }
 
+  @ApiOperation(StateControllerSwagger.operations.update)
   @Put(':id')
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TECH_SUPPORT)
   async update(
@@ -81,6 +86,7 @@ export class StateController {
     return this.stateService.update(id, updateStateDto);
   }
 
+  @ApiOperation(StateControllerSwagger.operations.delete)
   @Delete(':id')
   @Roles(UserRole.SUPER_ADMIN)
   async delete(@Param('id') id: string): Promise<StateDocument> {
