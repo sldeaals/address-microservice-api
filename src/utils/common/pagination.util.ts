@@ -28,6 +28,11 @@ export async function paginateSearch<T extends Document>(
 ): Promise<PaginationResult<T[]>> {
   const { page = 1, limit = 10, sort, order } = options;
 
+  const availableLimits = [10, 15, 20, 25];
+  if (!availableLimits.includes(limit)) {
+    throw new Error('Invalid limit value. Available limit values are: 10, 15, 20, 25');
+  }
+
   let queryBuilder = model.find() as Query<T[], Document<T>>;
 
   if (filterFn) {
