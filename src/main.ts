@@ -28,8 +28,6 @@ async function bootstrap(): Promise<void> {
   const env = process.env.ENVIRONMENT;
   const ipWhitelistService = new IpWhitelistService();
 
-  useSwagger(app);
-
   app.use(rateLimitMiddleware);
   app.useGlobalPipes(
     new ValidationPipe({ whitelist: true }),
@@ -55,7 +53,8 @@ async function bootstrap(): Promise<void> {
     httpsServer.on('error', (error) => {
       Logger.error(`HTTPS server error: ${error}`);
     });
-  } else {
+  } else if (env === Environment.DEVELOPMENT || env === Environment.TESTING) {
+    useSwagger(app);
     await app.listen(process.env.PORT);
   }
 }
