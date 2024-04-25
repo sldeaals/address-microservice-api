@@ -17,7 +17,7 @@ import { EncodingInterceptor } from './utils/interceptors/encode.interceptor.uti
 function useSwagger(app: INestApplication) {
   const options = new DocumentBuilder()
     .setTitle('Address Microservice API')
-    .setVersion('1.0.0')
+    .setVersion('0.0.0')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
