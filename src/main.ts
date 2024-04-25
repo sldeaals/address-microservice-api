@@ -12,6 +12,7 @@ import { RedisCacheInterceptor } from './redis/redis.interceptor';
 import { ClusterService } from './cluster/cluster.service';
 import { IpWhitelistService } from './utils/services/ip.whitelist.service.util';
 import { SanitizationPipe } from './utils/pipes/sanitization.pipe.util';
+import { EncodingInterceptor } from './utils/interceptors/encode.interceptor.util';
 
 function useSwagger(app: INestApplication) {
   const options = new DocumentBuilder()
@@ -37,6 +38,7 @@ async function bootstrap(): Promise<void> {
   app.useGlobalFilters(new ExceptionsFilter());
   app.useGlobalInterceptors(
     new RedisCacheInterceptor(new RedisService()),
+    new EncodingInterceptor(),
     new ApiResponseUtil(),
   );
   app.enableCors({
