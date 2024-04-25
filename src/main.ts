@@ -11,6 +11,7 @@ import { RedisService } from './redis/redis.service';
 import { RedisCacheInterceptor } from './redis/redis.interceptor';
 import { ClusterService } from './cluster/cluster.service';
 import { IpWhitelistService } from './utils/services/ip.whitelist.service.util';
+import { SanitizationPipe } from './utils/pipes/sanitization.pipe.util';
 
 function useSwagger(app: INestApplication) {
   const options = new DocumentBuilder()
@@ -29,7 +30,10 @@ async function bootstrap(): Promise<void> {
   useSwagger(app);
 
   app.use(rateLimitMiddleware);
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({ whitelist: true }),
+    new SanitizationPipe(),
+  );
   app.useGlobalFilters(new ExceptionsFilter());
   app.useGlobalInterceptors(
     new RedisCacheInterceptor(new RedisService()),
