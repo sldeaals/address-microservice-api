@@ -1,48 +1,87 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Address Microservice API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Overview
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The Address Microservice API is designed to provide address-related functionalities through a RESTful API. It is built using Node.js with Nest.js framework, and utilizes Mongoose for MongoDB interaction and Redis for caching. Swagger is implemented for API documentation.
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Developed for shipping services, billing services, among others.
+
+## Features
+
+- **Country:** Fetches countries data.
+- **State:** Fetches states data.
+- **City:** Fetches cities data.
+- **District:** Fetches districts data.
+- **CRUDs:** Maintains address data.
+- **Input Validation:** All user inputs are validated and sanitized to prevent SQL injection and other attacks.
+- **Data Sanitization:** User inputs and data are sanitized before processing to prevent XSS attacks.
+- **Authentication and Authorization:** Implements authentication and authorization mechanisms to ensure only authorized users can access API endpoints.
+- **HTTPS:** Enforces HTTPS to encrypt data transmission and prevent man-in-the-middle attacks.
+- **Rate Limiting:** Implements rate limiting to prevent brute force attacks and DDoS attacks.
+- **Error Handling:** Proper error handling is implemented to avoid leaking sensitive information.
+- **Content Security Policy (CSP):** CSP headers are implemented to prevent XSS attacks by controlling which resources are loaded by the browser.
+- **Input and Output Encoding:** Data is encoded to prevent injection attacks.
+- **Session Management:** Secure session management is implemented to prevent session hijacking and fixation.
+- **Security Headers:** Various security headers such as X-Content-Type-Options, X-Frame-Options, and X-XSS-Protection are implemented to enhance security.
+- **Dependency Management:** Regularly updates dependencies to patch security vulnerabilities.
+
+Additionally, load balancing with cluster, caching, connection pooling, and logging functionalities are implemented.
 
 ## Installation
 
+1. Clone the repository:
 ```bash
-$ npm install
+$ git clone https://github.com/sldeaals/address-microservice-api.git
 ```
 
-## Running the app
+2. Install dependencies:
+[Node](https://nodejs.org/en/download/package-manager)
+[Redis](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/)
+
+```bash
+$ cd address-microservice-api
+
+$ nvm use
+
+$ npm i
+```
+
+## Configuration
+Environment variables can be set in a .env file. Refer to the .env.example for required variables.
+
+## Usage
+
+1. Start the Redis server:
+```bash
+$ npm run start:redis
+```
+
+2. Start the application:
+```bash
+$ npm start:app
+```
+
+3. Access the API at http://localhost:<port>
+
+### Running the app
 
 ```bash
 # development
-$ npm run start
+$ npm run start:app
 
 # watch mode
-$ npm run start:dev
+$ npm run start:dev:app
 
 # production mode
 $ npm run start:prod
+
+# concurrently redis & nest
+## For development
+$ npm run start
+## watch mode
+$ npm run start:dev
 ```
 
 ## Test
@@ -58,16 +97,16 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Contributing
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Contributions are welcome! Please open an issue or submit a pull request.
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Daniel Arias](https://discord.gg/6V6G9xaQ)
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+Address Microservice API is [MIT licensed](LICENSE).
+
+Feel free to adjust or expand it according to your specific project requirements!
