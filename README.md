@@ -1,5 +1,15 @@
 # Address Microservice API
 
+<div align="center">
+  <p>Powered by:</p>
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB">
+  <img src="https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white" alt="Mongoose">
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/Nest.js-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="Nest.js">
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+</div>
+
 ## Overview
 
 The Address Microservice API is designed to provide address-related functionalities through a RESTful API. It is built using Node.js with Nest.js framework, and utilizes Mongoose for MongoDB interaction and Redis for caching. Swagger is implemented for API documentation.
@@ -37,7 +47,7 @@ $ git clone https://github.com/sldeaals/address-microservice-api.git
 ```
 
 2. Install dependencies:
-[Node](https://nodejs.org/en/download/package-manager)
+[Node](https://nodejs.org/en/download/package-manager) | 
 [Redis](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/)
 
 ```bash
@@ -63,7 +73,7 @@ $ npm run start:redis
 $ npm start:app
 ```
 
-3. Access the API at http://localhost:<port>
+3. Access the API at http://localhost:PORT
 
 ### Running the app
 
@@ -78,8 +88,10 @@ $ npm run start:dev:app
 $ npm run start:prod
 
 # concurrently redis & nest
+
 ## For development
 $ npm run start
+
 ## watch mode
 $ npm run start:dev
 ```
